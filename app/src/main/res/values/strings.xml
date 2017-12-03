@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TMDBTest</string>
+    <string name="popTitle">Popular Movies</string>
+</resources>
