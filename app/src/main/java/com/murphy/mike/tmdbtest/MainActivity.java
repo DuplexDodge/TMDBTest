@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<PopularMovieResults> call, Response<PopularMovieResults> response) {
                 PopularMovieResults results = response.body();
                 //List<PopularMovieResults.ResultsBean> listOfMovies = results.getResults();
-                //
                 listOfMovies = results.getResults();
                 adapter = new CustomAdapter(listOfMovies);
                 recyclerView.setAdapter(adapter);
