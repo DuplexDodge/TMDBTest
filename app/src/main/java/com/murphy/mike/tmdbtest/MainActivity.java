@@ -1,15 +1,25 @@
 package com.murphy.mike.tmdbtest;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.GridLayout;
-import android.widget.TextView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.LinearLayout;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -26,18 +36,77 @@ public class MainActivity extends AppCompatActivity {
     public static String LANGUAGE = "en-US";
     public static String CATEGORY = "popular";
 
-    private TextView movieTitleTextView;
-
     private RecyclerView recyclerView;
     private CustomAdapter adapter;
     private List<PopularMovieResults.ResultsBean> listOfMovies;
+
+    private static boolean isVisible = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(Build.VERSION.SDK_INT >= 21){
+            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        }
+
+        Toolbar titleBar = (Toolbar) findViewById(R.id.titleBar);
+        setSupportActionBar(titleBar);
+
         initViews();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_search, menu);
+        MenuItem item = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView)item.getActionView();
+
+        final Animation fadeIn = new AlphaAnimation(0, 1);
+        fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
+        fadeIn.setDuration(200);
+
+        final Animation fadeOut = new AlphaAnimation(1, 0);
+        fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
+        fadeOut.setStartOffset(150);
+        fadeOut.setDuration(150);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent intent = new Intent(getContext(), SearchActivity.class);
+                intent.putExtra("QUERY", query);
+                startActivity(intent);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.equals("")){
+                    if(!isVisible) {
+                        LinearLayout holderLayout = (LinearLayout) findViewById(R.id.holderLayout);
+                        holderLayout.startAnimation(fadeIn);
+                        holderLayout.setVisibility(View.VISIBLE);
+                        isVisible = true;
+                    }
+                }else{
+                    if(isVisible) {
+                        LinearLayout holderLayout = (LinearLayout) findViewById(R.id.holderLayout);
+                        holderLayout.startAnimation(fadeOut);
+                        holderLayout.setVisibility(View.INVISIBLE);
+                        isVisible = false;
+                    }
+                }
+
+                return false;
+            }
+        });
+
+        return true;
+    }
+
 
     private void initViews(){
         recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
@@ -70,5 +139,9 @@ public class MainActivity extends AppCompatActivity {
                 t.printStackTrace();
             }
         });
+    }
+
+    public Context getContext() {
+        return getApplication().getApplicationContext();
     }
 }

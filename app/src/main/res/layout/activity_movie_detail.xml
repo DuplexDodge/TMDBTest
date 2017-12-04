@@ -26,9 +26,10 @@
         <ImageView
             android:id="@+id/movieImage"
             android:layout_width="match_parent"
-            android:layout_height="225dp"
-            android:scaleType="fitXY"
-            app:srcCompat="@android:drawable/ic_menu_report_image" />
+            android:layout_height="200dp"
+            android:background="@color/colorPrimaryLight"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/tmdblack" />
 
         <ScrollView
             android:layout_width="match_parent"

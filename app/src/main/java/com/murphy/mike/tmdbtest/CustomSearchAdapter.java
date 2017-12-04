@@ -9,36 +9,41 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
-
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 /**
- * Created by Mike on 12/2/2017.
+ * Created by Mike on 12/3/2017.
  */
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
-    private List<PopularMovieResults.ResultsBean> listOfMovies;
+public class CustomSearchAdapter extends RecyclerView.Adapter<CustomSearchAdapter.ViewHolder> {
+    private List<SearchMovieResults.ResultsBean> listOfMovies;
 
-    public CustomAdapter(List<PopularMovieResults.ResultsBean> listOfMovies){
+    public CustomSearchAdapter(List<SearchMovieResults.ResultsBean> listOfMovies){
         this.listOfMovies = listOfMovies;
     }
 
     @Override
-    public CustomAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
+    public CustomSearchAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cardview, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(CustomAdapter.ViewHolder viewHolder, int i){
-        String url = "https://image.tmdb.org/t/p/w780/"+ listOfMovies.get(i).getBackdrop_path();
+    public void onBindViewHolder(CustomSearchAdapter.ViewHolder viewHolder, int i){
+        String url;
+        if(listOfMovies.get(i).getBackdrop_path() == null){
+            url = "http://image.tmdb.org/t/p/w780/"+ listOfMovies.get(i).getPoster_path();
+        }else {
+            url = "https://image.tmdb.org/t/p/w780/" + listOfMovies.get(i).getBackdrop_path();
+        }
 
         viewHolder.title.setText(listOfMovies.get(i).getTitle());
         try {
             viewHolder.year.setText(listOfMovies.get(i).getRelease_date().toString().substring(0, 4));
         }catch(Exception e){
-            //No Release Date
+            //No release date
             viewHolder.year.setText("N/A");
         }
         Picasso.with(viewHolder.backdrop.getContext()).load(url).into(viewHolder.backdrop);
@@ -68,9 +73,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                 @Override
                 public void onClick(View view) {
                     intent =  new Intent(context, MovieDetailActivity.class);
-                    PopularMovieResults.ResultsBean object = getObject(getAdapterPosition());
+                    SearchMovieResults.ResultsBean object = getObject(getAdapterPosition());
                     intent.putExtra("movieObj", object);
-                    intent.putExtra("type","popular");
+                    intent.putExtra("type","search");
                     context.startActivity(intent);
                 }
             });
@@ -78,11 +83,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         }
     }
 
-    public PopularMovieResults.ResultsBean getObject(int pos){
+    public SearchMovieResults.ResultsBean getObject(int pos){
         listOfMovies.get(pos);
-        com.murphy.mike.tmdbtest.PopularMovieResults.ResultsBean movieObject = listOfMovies.get(pos);
+        com.murphy.mike.tmdbtest.SearchMovieResults.ResultsBean movieObject = listOfMovies.get(pos);
         return movieObject;
     }
-
 
 }
