@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar titleBar = (Toolbar) findViewById(R.id.titleBar);
         setSupportActionBar(titleBar);
 
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+
         initViews();
     }
 

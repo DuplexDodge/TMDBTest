@@ -56,6 +56,8 @@ public class SearchActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+
         initViews();
     }
 
