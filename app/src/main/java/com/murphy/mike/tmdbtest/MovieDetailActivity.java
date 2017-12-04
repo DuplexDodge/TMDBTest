@@ -42,12 +42,19 @@ public class MovieDetailActivity extends Activity {
 
         Intent i = getIntent();
         SearchMovieResults.ResultsBean object = (SearchMovieResults.ResultsBean) i.getSerializableExtra("movieObj");
-        String url = "https://image.tmdb.org/t/p/w780/"+ object.getBackdrop_path();
 
         title.setText(object.getTitle());
         date.setText(object.getRelease_date());
         rating.setText(Double.toString(object.getVote_average()));
         description.setText(object.getOverview());
+
+        String url;
+        if(object.getBackdrop_path() == null){
+            url = "http://image.tmdb.org/t/p/w780/"+ object.getPoster_path();
+        }else {
+            url = "https://image.tmdb.org/t/p/w780/" + object.getBackdrop_path();
+        }
+
         Picasso.with(backdrop.getContext()).load(url).into(backdrop);
     }
 
