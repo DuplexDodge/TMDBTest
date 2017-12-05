@@ -24,4 +24,11 @@ public interface ApiInterface {
             @Query("query")String query,
             @Query("page")int page
     );
+
+    @GET("/3/movie/{movieID}/{category}")
+    Call<GetMovieCast> getMovieCast(
+            @Path("movieID")int movieID,
+            @Path("category")String category,
+            @Query("api_key")String apiKey
+    );
 }

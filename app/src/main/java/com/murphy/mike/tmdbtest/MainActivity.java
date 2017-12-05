@@ -48,13 +48,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if(Build.VERSION.SDK_INT >= 21){
-            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
         }
 
         Toolbar titleBar = (Toolbar) findViewById(R.id.titleBar);
         setSupportActionBar(titleBar);
 
-        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 
         initViews();
     }
@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_search, menu);
-        MenuItem item = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView)item.getActionView();
+        final MenuItem item = menu.findItem(R.id.search);
+        final SearchView searchView = (SearchView)item.getActionView();
 
         final Animation fadeIn = new AlphaAnimation(0, 1);
         fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
@@ -81,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getContext(), SearchActivity.class);
                 intent.putExtra("QUERY", query);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
+                searchView.setQuery("",false);
+                searchView.clearFocus();
+                item.collapseActionView();
                 return false;
             }
 
@@ -146,4 +150,11 @@ public class MainActivity extends AppCompatActivity {
     public Context getContext() {
         return getApplication().getApplicationContext();
     }
+
+    @Override
+    public void onPostResume() {
+        super.onPostResume();
+        this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+    }
+
 }

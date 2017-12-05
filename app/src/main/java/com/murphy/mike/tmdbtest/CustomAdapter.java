@@ -1,5 +1,6 @@
 package com.murphy.mike.tmdbtest;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import com.squareup.picasso.Picasso;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by Mike on 12/2/2017.
@@ -33,6 +36,18 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public void onBindViewHolder(CustomAdapter.ViewHolder viewHolder, int i){
         String url = "https://image.tmdb.org/t/p/w780/"+ listOfMovies.get(i).getBackdrop_path();
+
+        if(listOfMovies.get(i).getBackdrop_path() == null){
+            if(listOfMovies.get(i).getPoster_path() == null){
+                viewHolder.backdrop.setImageResource(R.drawable.tmdblack);
+            }else {
+                url = "http://image.tmdb.org/t/p/w780/" + listOfMovies.get(i).getPoster_path();
+                Picasso.with(viewHolder.backdrop.getContext()).load(url).into(viewHolder.backdrop);
+            }
+        }else{
+            url = "https://image.tmdb.org/t/p/w780/" + listOfMovies.get(i).getBackdrop_path();
+            Picasso.with(viewHolder.backdrop.getContext()).load(url).into(viewHolder.backdrop);
+        }
 
         viewHolder.title.setText(listOfMovies.get(i).getTitle());
         try {
@@ -72,6 +87,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     intent.putExtra("movieObj", object);
                     intent.putExtra("type","popular");
                     context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
                 }
             });
 

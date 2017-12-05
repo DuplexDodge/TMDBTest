@@ -1,5 +1,6 @@
 package com.murphy.mike.tmdbtest;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -34,9 +35,15 @@ public class CustomSearchAdapter extends RecyclerView.Adapter<CustomSearchAdapte
     public void onBindViewHolder(CustomSearchAdapter.ViewHolder viewHolder, int i){
         String url;
         if(listOfMovies.get(i).getBackdrop_path() == null){
-            url = "http://image.tmdb.org/t/p/w780/"+ listOfMovies.get(i).getPoster_path();
-        }else {
+            if(listOfMovies.get(i).getPoster_path() == null){
+                viewHolder.backdrop.setImageResource(R.drawable.tmdblack);
+            }else {
+                url = "http://image.tmdb.org/t/p/w780/" + listOfMovies.get(i).getPoster_path();
+                Picasso.with(viewHolder.backdrop.getContext()).load(url).into(viewHolder.backdrop);
+            }
+        }else{
             url = "https://image.tmdb.org/t/p/w780/" + listOfMovies.get(i).getBackdrop_path();
+            Picasso.with(viewHolder.backdrop.getContext()).load(url).into(viewHolder.backdrop);
         }
 
         viewHolder.title.setText(listOfMovies.get(i).getTitle());
@@ -46,7 +53,7 @@ public class CustomSearchAdapter extends RecyclerView.Adapter<CustomSearchAdapte
             //No release date
             viewHolder.year.setText("N/A");
         }
-        Picasso.with(viewHolder.backdrop.getContext()).load(url).into(viewHolder.backdrop);
+
     }
 
     @Override
@@ -77,6 +84,7 @@ public class CustomSearchAdapter extends RecyclerView.Adapter<CustomSearchAdapte
                     intent.putExtra("movieObj", object);
                     intent.putExtra("type","search");
                     context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
                 }
             });
 

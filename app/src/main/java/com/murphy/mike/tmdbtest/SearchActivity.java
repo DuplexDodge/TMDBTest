@@ -1,23 +1,14 @@
 package com.murphy.mike.tmdbtest;
 
-import android.content.Intent;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -48,15 +39,13 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         if(Build.VERSION.SDK_INT >= 21){
-            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
         }
 
         QUERY = getIntent().getStringExtra("QUERY");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
 
         initViews();
     }
@@ -110,5 +99,11 @@ public class SearchActivity extends AppCompatActivity {
         TextView resultsText = (TextView)findViewById(R.id.NumResults);
         resultsText.setText(fullString);
         resultsText.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onPostResume() {
+        super.onPostResume();
+        this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
     }
 }

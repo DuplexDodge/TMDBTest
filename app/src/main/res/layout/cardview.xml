@@ -11,8 +11,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="175dp"
-        android:background="@android:color/darker_gray"
-        app:srcCompat="@drawable/tmdblack" />
+        android:background="@android:color/darker_gray" />
 
     <ImageView
         android:id="@+id/backdropImg"
